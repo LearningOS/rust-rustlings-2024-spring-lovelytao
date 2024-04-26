@@ -22,14 +22,15 @@
 // Execute `rustlings hint errors5` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
 use std::error;
+use std::error::Error;
 use std::fmt;
 use std::num::ParseIntError;
 
+// std::error:Error 是 Rust 中抽象层次最高的错误，
+// 其它标准库中的错误都实现了该特征，因此我们可以用该特征对象代表一切错误
 // TODO: update the return type of `main()` to make this compile.
-fn main() -> Result<(), Box<dyn ???>> {
+fn main() -> Result<(), Box<dyn Error>> {
     let pretend_user_input = "42";
     let x: i64 = pretend_user_input.parse()?;
     println!("output={:?}", PositiveNonzeroInteger::new(x)?);

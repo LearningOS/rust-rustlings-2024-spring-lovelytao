@@ -8,9 +8,9 @@
 // Execute `rustlings hint lifetimes1` or use the `hint` watch subcommand for a
 // hint.
 
-// I AM NOT DONE
-
-fn longest(x: &str, y: &str) -> &str {
+// 和泛型一样，使用生命周期参数，需要先声明 <'a>
+fn longest<'a>(x: &'a str, y: &'a str) -> &'a str {
+    // 生命周期 'a 的大小就是 x 和 y 的作用域的重合部分
     if x.len() > y.len() {
         x
     } else {

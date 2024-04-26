@@ -1,8 +1,7 @@
 /*
-	heap
-	This question requires you to implement a binary heap function
+    heap
+    This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -38,6 +37,14 @@ where
 
     pub fn add(&mut self, value: T) {
         //TODO
+        self.items.push(value);
+        self.count += 1;
+        let mut index = self.count;
+        while index > 1 && (self.comparator)(&self.items[index], &self.items[index / 2]) {
+            // 将自己和父亲节点进行比较
+            self.items.swap(index / 2, index);
+            index /= 2; // 向上传递
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -57,8 +64,15 @@ where
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
+        let left_index = self.left_child_idx(idx);
+        let right_index = self.right_child_idx(idx);
+        if right_index <= self.count
+            && (self.comparator)(&self.items[right_index], &self.items[left_index])
+        {
+            right_index
+        } else {
+            left_index
+        }
     }
 }
 
@@ -84,8 +98,26 @@ where
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        if self.is_empty() {
+            return None;
+        }
+        let root = self.items.swap_remove(1);
+        self.count -= 1;
+        let mut index = 1;
+
+        loop {
+            let left_index = self.left_child_idx(index);
+            let right_index = self.right_child_idx(index);
+            let smallest_child_index = self.smallest_child_idx(index);
+            if smallest_child_index > self.count
+                || !(self.comparator)(&self.items[smallest_child_index], &self.items[index])
+            {
+                break;
+            }
+            self.items.swap(index, smallest_child_index);
+            index = smallest_child_index;
+        }
+        Some(root)
     }
 }
 

@@ -27,16 +27,18 @@
 //
 // You should NOT modify any existing code except for adding two lines of attributes.
 
-// I AM NOT DONE
-
 extern "Rust" {
     fn my_demo_function(a: u32) -> u32;
+    #[link_name = "my_demo_function"] // 增填别名
     fn my_demo_function_alias(a: u32) -> u32;
 }
 
-mod Foo {
+mod foo {
     // No `extern` equals `extern "Rust"`.
-    fn my_demo_function(a: u32) -> u32 {
+    // 在外部链接（extern）或与其他语言交互的情况下，通常会希望函数名保持不变，
+    // 以便在链接时能够正确地引用这些函数。
+    #[no_mangle] // 告诉编译器不要对函数名进行名称重整，从而保持函数名不变。
+    pub fn my_demo_function(a: u32) -> u32 {
         a
     }
 }
@@ -44,7 +46,7 @@ mod Foo {
 #[cfg(test)]
 mod tests {
     use super::*;
-
+    // use crate::my_demo_function_alias;
     #[test]
     fn test_success() {
         // The externally imported functions are UNSAFE by default
